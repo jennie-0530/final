@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./final_be
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./final_be:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    restart: always
+
+  frontend:
+    build:
+      context: ./final_fe
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./final_fe:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    restart: always
