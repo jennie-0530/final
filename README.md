@@ -1,5 +1,5 @@
 # Final
-ㅗㅗ
+
 ### Commit Emoji
 
 |   emoji    | commit message |       when to use it        |
