@@ -2,10 +2,11 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+// 다른 파일에서 sequelize 가져오기
+const sequelizeDB = require('./util/database');
 // http
 const { createServer } = require('node:http');
-const port: number = 3333;
+const port: number = 4000;
 
 // 서버
 const app = express();
@@ -26,4 +27,12 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 server.listen(port, () => {
   console.log(`http://localhost:${port}`);
+  sequelizeDB
+    .authenticate()
+    .then(() => {
+      console.log('Database connection has been established successfully.');
+    })
+    .catch((err: any) => {
+      console.error('Unable to connect to the database:', err);
+    });
 });

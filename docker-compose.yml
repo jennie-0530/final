@@ -21,3 +21,14 @@ services:
     environment:
       - NODE_ENV=development
     restart: always
+
+  admin:
+    build:
+      context: ./final_admin
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./final_admin:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    restart: always
