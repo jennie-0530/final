@@ -2,10 +2,10 @@
   "name": "final_be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.ts"
+    "dev": "nodemon app.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,8 @@
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
     "sequelize": "^6.37.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }

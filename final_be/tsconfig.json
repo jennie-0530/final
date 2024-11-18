@@ -8,9 +8,8 @@
     "skipLibCheck": true, // 라이브러리 체크 건너뛰기 (컴파일 속도 개선)
     "moduleResolution": "node", // 모듈 해석 방법 설정: 'node' (Node.js)
     "esModuleInterop": true, // CommonJS 모듈 import를 ES 모듈 방식처럼 사용할 수 있게 허용
-    "forceConsistentCasingInFileNames": true, // 파일명 대소문자 일관성 검사 활성화
-    "jsx": "react" // React JSX 지원
+    "forceConsistentCasingInFileNames": true // 파일명 대소문자 일관성 검사 활성화
   },
-  "include": ["src/**/*"], // 포함할 파일 경로
+  "include": ["src/**/*", "swagger", "util", "app.ts"], // 포함할 파일 경로
   "exclude": ["node_modules"] // 제외할 파일 경로
 }
