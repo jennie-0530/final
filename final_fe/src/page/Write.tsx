@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import ProductForm from '../components/common/ProductForm';
+import ProductForm from '../components/Feed/ProductForm';
 
 const Write = () => {
   // const navigate = useNavigate();
