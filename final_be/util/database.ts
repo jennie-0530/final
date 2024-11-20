@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+import { Sequelize } from 'sequelize';
 // Sequelize 인스턴스 생성
 const sequelize = new Sequelize('celebright', 'algorithm', 'Whddlzjq123$%', {
   host: '221.145.75.81',
@@ -15,4 +15,4 @@ const sequelize = new Sequelize('celebright', 'algorithm', 'Whddlzjq123$%', {
   },
 });
 
-module.exports = sequelize;
+export { sequelize };
