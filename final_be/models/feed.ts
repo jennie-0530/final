@@ -14,7 +14,7 @@ export const Feed = sequelize.define(
       defaultValue: null,
       allowNull: true,
     },
-    likes: { type: DataTypes.JSONB, allowNull: true },
+    likes: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true }, // ARRAY로 설정
   },
   {
     timestamps: true, // Sequelize가 기본적으로 createdAt, updatedAt 관리

@@ -1,4 +1,6 @@
 import { Feed } from '../models/feed'; // Feed 모델 임포트
+import { Op } from 'sequelize'; // Op 임포트
+import { sequelize } from '../util/database';
 
 interface FeedData {
   influencer_id: number;
@@ -17,15 +19,33 @@ export const saveFeedToDB = async (feedData: FeedData) => {
     const feed = await Feed.create({
       influencer_id: feedData.influencer_id, // influencer_id 매핑
       content: feedData.title, // content 필드 매핑
-      images: JSON.stringify(feedData.thumbnail), // JSON으로 변환
-      products: JSON.stringify(feedData.product), // JSON으로 변환
+      images: feedData.thumbnail, // JSON으로 변환하지 않음
+      products: feedData.product, // JSON으로 변환하지 않음
       visibility_level: feedData.visibility_level, // 가시성 수준
-      likes: JSON.stringify([]), // 기본값 빈 배열로 설정
+      likes: [], // 기본값 빈 배열로 설정
     });
 
     return feed;
   } catch (error) {
     console.error('Error saving feed to DB:', error);
     throw new Error('Error saving feed to DB');
+  }
+};
+
+export const findFeedsLikedByUser = async (userId: number) => {
+  try {
+    // Feed 테이블에서 likes 컬럼에 userId가 포함된 피드 찾기
+    const feeds = await Feed.findAll({
+      where: {
+        [Op.and]: [
+          sequelize.where(sequelize.fn('JSON_CONTAINS', sequelize.col('likes'), `"${userId}"`), true)
+        ]
+      }
+    });
+
+    return feeds;
+  } catch (error) {
+    console.error('Error finding feeds liked by user:', error);
+    throw new Error('Error finding feeds liked by user');
   }
 };
