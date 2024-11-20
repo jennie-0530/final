@@ -7,7 +7,7 @@ services:
       - '4000:4000'
     volumes:
       - ./final_be:/usr/src/app
-      - /usr/src/app/node_modules # node_modules를 도커 컨테이너 내부에만 위치하도록 설정
+      - /usr/src/app/node_modules # 로컬 `node_modules`를 덮어쓰지 않도록 설정
     environment:
       - NODE_ENV=development
     restart: always
@@ -19,7 +19,7 @@ services:
       - '3000:3000'
     volumes:
       - ./final_fe:/usr/src/app
-      - /usr/src/app/node_modules # node_modules를 도커 컨테이너 내부에만 위치하도록 설정
+      - /usr/src/app/node_modules # 로컬 `node_modules`를 덮어쓰지 않도록 설정
     environment:
       - NODE_ENV=development
     restart: always
@@ -31,7 +31,7 @@ services:
       - '3001:3001'
     volumes:
       - ./final_admin:/usr/src/app
-      - /usr/src/app/node_modules # node_modules를 도커 컨테이너 내부에만 위치하도록 설정
+      - /usr/src/app/node_modules # 로컬 `node_modules`를 덮어쓰지 않도록 설정
     environment:
       - NODE_ENV=development
     restart: always
