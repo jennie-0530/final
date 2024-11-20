@@ -9,6 +9,7 @@ import { swaggerOptions } from './swagger/config'; // swaggerConfig 경로는 �
 
 // 라우터
 import { router as feedRouter } from './router/feed'; // 'feedRouter'로 이름 수정 (라우터 명시적 이름)
+import { router as userRouter } from './router/user'; // 'userRouter'로 이름 수정 (라우터 명시적 이름)
 
 // 포트 및 앱 설정
 const port: number = 4000;
@@ -32,6 +33,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // 라우터 설정
 app.use('/feed', feedRouter);
+app.use('/user', userRouter);
 
 // 서버 실행
 server.listen(port, () => {
