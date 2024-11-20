@@ -23,8 +23,8 @@ app.use(
     credentials: true, // 쿠키를 포함하여 요청을 보내도록 설정
   })
 );
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Swagger UI 설정
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

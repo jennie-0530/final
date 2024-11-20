@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'; // NextFunction을 추가합니다
+import { Request, Response } from 'express';
 import multer from 'multer';
 import { saveFeedToDB } from '../services/feedService';
 import dotenv from 'dotenv';
@@ -8,8 +8,8 @@ dotenv.config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage }).fields([
-  { name: 'thumbnail', maxCount: 5 },
-  { name: 'productImg', maxCount: 5 },
+  { name: 'productImgs', maxCount: 5 },
+  { name: 'postImages', maxCount: 5 },
 ]);
 
 export const FeedWrite = async (req: Request, res: Response) => {
@@ -19,43 +19,42 @@ export const FeedWrite = async (req: Request, res: Response) => {
       return res.status(400).json({ error: '파일 업로드 실패' });
     }
     try {
-      const { title, description, grade, productImgLink, productImgTitle } =
+      const { description, grade, productImgsLink, productImgsTitle } =
         req.body;
 
-      const { thumbnail, productImg } = req.files as {
-        thumbnail?: Express.Multer.File[];
-        productImg?: Express.Multer.File[];
+      const { productImgs, postImages } = req.files as {
+        postImages?: Express.Multer.File[];
+        productImgs?: Express.Multer.File[];
       };
-      if (!thumbnail || !productImg) {
+      if (!postImages) {
         return res.status(400).json({ error: '필수 파일이 누락되었습니다.' });
       }
 
       const thumbnailUrls = await Promise.all(
-        (thumbnail as Express.Multer.File[]).map(uploadToS3)
+        (postImages as Express.Multer.File[]).map(uploadToS3)
       );
       const productImgUrls = await Promise.all(
-        (productImg as Express.Multer.File[]).map(uploadToS3)
+        (productImgs as Express.Multer.File[]).map(uploadToS3)
       );
       const feedLinksArray =
-        typeof productImgLink === 'string'
-          ? productImgLink.split(',') // 문자열인 경우 쉼표로 구분하여 배열로 변환
-          : productImgLink || [];
+        typeof productImgsLink === 'string'
+          ? productImgsLink.split(',') // 문자열인 경우 쉼표로 구분하여 배열로 변환
+          : productImgsLink || [];
       const feedTitlesArray =
-        typeof productImgTitle === 'string'
-          ? productImgTitle.split(',') // 문자열인 경우 쉼표로 구분하여 배열로 변환
-          : productImgTitle || [];
+        typeof productImgsTitle === 'string'
+          ? productImgsTitle.split(',') // 문자열인 경우 쉼표로 구분하여 배열로 변환
+          : productImgsTitle || [];
 
       const feedData = {
         influencer_id: 5,
         nickname: 'testUser',
-        title,
         description,
         visibility_level: grade,
         thumbnail: thumbnailUrls,
-        product: feedLinksArray.map((link: string, index: number) => ({
-          link,
+        product: productImgUrls.map((img: string, index: number) => ({
+          img,
           title: feedTitlesArray[index],
-          img: productImgUrls[index],
+          link: feedLinksArray[index],
         })),
         likes: [],
       };

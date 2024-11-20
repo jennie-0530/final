@@ -3,7 +3,6 @@ import { Feed } from '../models/feed'; // Feed 모델 임포트
 interface FeedData {
   influencer_id: number;
   nickname: string;
-  title: string;
   description: string;
   visibility_level: string;
   thumbnail: string[]; // 업로드된 썸네일 이미지 URL
@@ -16,7 +15,7 @@ export const saveFeedToDB = async (feedData: FeedData) => {
     // 새 피드 정보 DB에 저장
     const feed = await Feed.create({
       influencer_id: feedData.influencer_id, // influencer_id 매핑
-      content: feedData.title, // content 필드 매핑
+      content: feedData.description, // content 필드 매핑
       images: JSON.stringify(feedData.thumbnail), // JSON으로 변환
       products: JSON.stringify(feedData.product), // JSON으로 변환
       visibility_level: feedData.visibility_level, // 가시성 수준
