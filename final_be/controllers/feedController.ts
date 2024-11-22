@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 import multer from 'multer';
-import { saveFeedToDB } from '../services/feedService';
+import { getFeedById, saveFeedToDB } from '../services/feedService';
 import dotenv from 'dotenv';
 import uploadToS3 from '../util/uplode';
 
@@ -11,6 +11,27 @@ const upload = multer({ storage }).fields([
   { name: 'productImgs', maxCount: 5 },
   { name: 'postImages', maxCount: 5 },
 ]);
+
+export const FeedGet: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || isNaN(Number(id))) {
+      res.status(400).json({ message: '유효하지 않은 피드 ID입니다.' });
+      return; // 명시적으로 반환
+    }
+
+    const feed = await getFeedById(Number(id));
+    if (!feed) {
+      res.status(404).json({ message: '해당 피드가 없습니다.' });
+      return;
+    }
+    res.status(200).json(feed); // 응답 후 반환 없음
+  } catch (error) {
+    console.error('FeedGet Error:', error);
+    res.status(500).json({ error: '피드를 가져오는 중 오류가 발생했습니다.' });
+  }
+};
 
 export const FeedWrite = async (req: Request, res: Response) => {
   upload(req as Request, res as Response, async (err: any) => {
