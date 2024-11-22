@@ -48,6 +48,7 @@ const MyMenu = ({ user, userId }: { user: any; userId: string }) => {
         centered
         textColor="primary"
         indicatorColor="primary"
+        sx={{ '& .MuiTab-root': { fontSize: '1.25rem' } }} // 글씨 크기 키우기
       >
         {tabPaths.map((tab) => (
           <Tab
@@ -56,6 +57,7 @@ const MyMenu = ({ user, userId }: { user: any; userId: string }) => {
             value={tab.path}
             component={Link}
             to={tab.path}
+            
           />
         ))}
       </Tabs>
