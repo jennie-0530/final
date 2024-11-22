@@ -14,7 +14,6 @@ import { router as feedRouter } from './router/feed'; // 'feedRouter'로 이름 
 const port: number = 4000;
 const app = express();
 const server = createServer(app);
-
 // 미들웨어 설정
 app.use(morgan('dev'));
 app.use(
