@@ -1,6 +1,7 @@
 import { Feed } from '../models/feed'; // Feed 모델 임포트
 import { Op } from 'sequelize'; // Op 임포트
 import { sequelize } from '../util/database';
+import { Influencer } from '../models/influencer';
 
 interface FeedData {
   influencer_id: number;
@@ -34,18 +35,34 @@ export const saveFeedToDB = async (feedData: FeedData) => {
 
 export const findFeedsLikedByUser = async (userId: number) => {
   try {
-    // Feed 테이블에서 likes 컬럼에 userId가 포함된 피드 찾기
     const feeds = await Feed.findAll({
-      where: {
-        [Op.and]: [
-          sequelize.where(sequelize.fn('JSON_CONTAINS', sequelize.col('likes'), `"${userId}"`), true)
-        ]
-      }
+      where: sequelize.literal(`JSON_CONTAINS(likes, '"${userId}"')`), // 정확한 JSON 배열 검사
+      attributes: ["id", "content", "images", "products", "likes"],
     });
 
     return feeds;
   } catch (error) {
-    console.error('Error finding feeds liked by user:', error);
-    throw new Error('Error finding feeds liked by user');
+    console.error("Error fetching feeds liked by user:", error);
+    throw new Error("Error fetching feeds liked by user");
+  }
+};
+
+export const findFeedsByUser = async (userId: number) => {
+  try {
+    const influencerId = (await Influencer.findOne({
+      where: { user_id: userId },
+      attributes: ["id"],
+    }))?.dataValues.id;
+    console.log(influencerId);
+    
+    const feeds = await Feed.findAll({
+      where: {influencer_id: influencerId},
+      attributes: ["id", "content", "images", "products", "likes"],
+    });
+
+    return feeds;
+  } catch (error) {
+    console.error("Error fetching feeds liked by user:", error);
+    throw new Error("Error fetching feeds liked by user");
   }
 };
