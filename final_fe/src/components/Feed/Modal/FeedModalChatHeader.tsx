@@ -1,7 +1,7 @@
 import { Box, Typography, Button } from '@mui/material';
 import React from 'react';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-const FeedModalChatHeader = () => {
+const FeedModalChatHeader = ({ name }: { name: string }) => {
   return (
     <Box
       sx={{
@@ -15,7 +15,7 @@ const FeedModalChatHeader = () => {
     >
       <Box sx={{ display: 'flex' }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-          인플 김현진
+          {name}
         </Typography>
         <Button
           sx={{

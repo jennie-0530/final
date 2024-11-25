@@ -5,7 +5,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SendIcon from '@mui/icons-material/Send';
 
 // Chat Component
-const Chat: React.FC = () => {
+const Chat = ({ content }: { content: string }) => {
   const messages = [
     {
       id: 1,
@@ -42,7 +42,7 @@ const Chat: React.FC = () => {
               borderBottom: '1px solid #ddd',
             }}
           >
-            안녕하세요. 잘안취하고 자취하는 남자 김현진입니다 ^^
+            {content}
           </Typography>
         </Box>
         <Typography

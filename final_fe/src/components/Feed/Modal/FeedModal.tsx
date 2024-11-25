@@ -67,9 +67,9 @@ const ChatPage = ({ onClose }: ModalProps) => {
           }}
         >
           {/* Chat Header */}
-          <FeedModalChatHeader />
+          <FeedModalChatHeader name={feed?.influencer || ''} />
           {/* Chat Body */}
-          <Chat />
+          <Chat content={feed?.content || ''} />
         </Box>
       </Box>
     </Suspense>
