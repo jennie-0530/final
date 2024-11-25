@@ -2,6 +2,13 @@ import { User } from "../models/user";
 import { Influencer } from "../models/influencer";
 import { sequelize } from "../util/database";
 
+interface InfluencerData {
+  id?: number;
+  follower?: string;
+  banner_picture?: string;
+  category?: string;
+}
+
 interface UserData {
   username: string;
   email: string;
@@ -19,7 +26,7 @@ export const getUserById = async (userId: number) => {
       include: [
         {
           model: Influencer,
-          attributes: ["id", "follower", "banner_picture"],
+          attributes: ["id", "follower", "banner_picture", "category"],
         },
       ],
       attributes: ["id", "username", "email", "about_me", "profile_picture"],
@@ -41,10 +48,13 @@ export const getUserById = async (userId: number) => {
 // 사용자 정보 업데이트
 export const updateUser = async (
   userId: number,
-  updates: Partial<UserData>
+  updates: Partial<UserData & { influencer: Partial<InfluencerData> }>
 ) => {
   try {
-    const [affectedRows] = await User.update(updates, {
+    const { influencer, ...userUpdates } = updates;
+
+    console.log("User updates:", userUpdates); // User 업데이트 데이터 확인
+    const [affectedRows] = await User.update(userUpdates, {
       where: { id: userId },
     });
 
@@ -52,11 +62,24 @@ export const updateUser = async (
       throw new Error("User not found");
     }
 
+    if (influencer) {
+      console.log("Influencer updates:", influencer); // 업데이트 데이터 확인
+      const [influencerInstance, created] = await Influencer.findOrCreate({
+        where: { user_id: userId },
+        defaults: {
+          banner_picture: influencer.banner_picture || null,
+          category: influencer.category || null,
+        },
+      });
+    
+      if (!created) {
+        await influencerInstance.update(influencer);
+      }
+    }
+
     const updatedUser = await User.findOne({
       where: { id: userId },
-      attributes: ["id", "username", "email", "about_me", "profile_picture"],
-      raw: true,
-      nest: true,
+      include: [{ model: Influencer }],
     });
 
     return updatedUser;
@@ -66,11 +89,12 @@ export const updateUser = async (
   }
 };
 
+
 export const findFollowingsByUser = async (userId: number) => {
   try {
     const follows = await Influencer.findAll({
       where: sequelize.literal(`JSON_CONTAINS(follower, '"${userId}"')`),
-      attributes: ["id", "user_id", "follower"],
+      attributes: ["id", "user_id", "follower", "category"],
       include: [
         {
           model: User,

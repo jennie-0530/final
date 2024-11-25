@@ -9,6 +9,7 @@ export const formatUserResponse = (user: any) => ({
           id: user.Influencer.id,
           follower: user.Influencer.follower,
           banner_picture: user.Influencer.banner_picture,
+          category: user.Influencer.category,
         }
       : null,
   });

@@ -31,9 +31,6 @@ const FeedList: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ marginTop: 4 }}>
-      {/* <Typography variant="h4" component="h1" gutterBottom>
-        User Feeds
-      </Typography> */}
       <ImageGrid items={items} />
     </Container>
   );

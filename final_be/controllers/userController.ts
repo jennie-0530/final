@@ -18,14 +18,16 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
 // 사용자 정보 업데이트
 export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log("Update request body:", req.body); // 요청 본문 확인
     const updatedUser = await updateUser(Number(req.params.id), req.body);
-    const response = formatUserResponse(updatedUser);
-    res.status(200).json(response);
+    console.log("Updated user:", updatedUser); // 업데이트된 사용자 확인
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.error("사용자 업데이트 오류:", error);
     res.status(500).json({ error: "사용자 정보를 업데이트하는 중 오류가 발생했습니다." });
   }
 };
+
 
 // 사용자가 좋아요한 피드 조회
 export const findLikeFeedForUser = async (req: Request, res: Response): Promise<void> => {

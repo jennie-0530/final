@@ -19,15 +19,15 @@ export const routes = [
         children: [
           {
             path: ':userId/likes',
-            element: <LikeList />, 
+            element: <LikeList />,
           },
           {
             path: ':userId/follows',
-            element: <FollowList />, 
+            element: <FollowList />,
           },
           {
             path: ':userId/feeds',
-            element: <FeedList />, 
+            element: <FeedList />,
           },
           {
             path: ':userId/membership',

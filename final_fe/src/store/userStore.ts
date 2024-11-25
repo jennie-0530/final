@@ -20,6 +20,7 @@ export interface User {
     id: number;
     follower: string;
     banner_picture: string;
+    category: string;
   };
 }
 

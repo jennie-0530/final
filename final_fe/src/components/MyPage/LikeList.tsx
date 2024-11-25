@@ -15,6 +15,18 @@ const LikeList: React.FC = () => {
     return <Typography variant="body1">Error loading likes</Typography>;
   }
 
+  // 데이터가 없는 경우 처리
+  if (!likes || likes.length === 0) {
+    return (
+      <Container maxWidth="md" sx={{ marginTop: 4, textAlign: "center" }}>
+        <Typography variant="h6" color="textSecondary">
+          좋아요 한 게시물이 없습니다.
+        </Typography>
+      </Container>
+    );
+  }
+
+  // 데이터가 있는 경우 처리
   const items = likes.map((like) => ({
     id: like.id,
     imageUrl: imageParse(like.images),
@@ -22,7 +34,9 @@ const LikeList: React.FC = () => {
       <>
         <Box sx={{ fontSize: "1.25rem", fontWeight: "bold", padding: 1, borderRadius: 1 }}>
           <BrightIcon />
-          <Typography align="center" variant="h4">{JSON.parse(like.likes).length}</Typography>
+          <Typography align="center" variant="h4">
+            {JSON.parse(like.likes).length}
+          </Typography>
         </Box>
         <Typography>{like.content}</Typography>
       </>
@@ -31,9 +45,6 @@ const LikeList: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ marginTop: 4 }}>
-      {/* <Typography variant="h4" component="h1" gutterBottom>
-        User Likes
-      </Typography> */}
       <ImageGrid items={items} />
     </Container>
   );

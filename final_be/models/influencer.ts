@@ -28,6 +28,10 @@ export const Influencer = sequelize.define(
       type: DataTypes.STRING(255), // VARCHAR(255)
       allowNull: true,
     },
+    category: {
+      type: DataTypes.STRING(255), // VARCHAR(255)
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE, // TIMESTAMP
       defaultValue: DataTypes.NOW, // CURRENT_TIMESTAMP
