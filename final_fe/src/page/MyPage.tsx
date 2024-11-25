@@ -1,34 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import MyInfo from '../components/MyPage/MyInfo';
-import LikeList from '../components/MyPage/FavoriteList';
-import { useUserStore } from '../store/userStore';
-import { User } from '../store/userStore'; // User 타입을 가져옵니다
-import axios from 'axios';
+import { useState, useEffect, useCallback } from "react";
+import MyInfo from "../components/MyPage/MyInfo";
+import { useUserStore } from "../store/userStore";
+import { fetchUserInfo } from "../util/myPageApi";
+import MyMenu from "../components/MyPage/MyMenu";
+import { Outlet } from "react-router-dom";
+import EditProfileForm from "../components/MyPage/EditProfileForm";
 
 const MyPage = () => {
   const { user, setUser } = useUserStore();
-  const [likes, setLikes] = useState<any[]>([]); // 좋아요한 피드 데이터를 저장할 상태 추가
+  const [userId, setUserId] = useState<string>("1"); // 기본 User ID
+  const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
 
-  const fetchLikes = async (userId: string) => {
+  const fetchData = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/user/${userId}/likes`);
-      setLikes(response.data);
+      const userInfo = await fetchUserInfo(userId);
+      setUser(userInfo);
     } catch (error) {
-      console.error('Error fetching likes:', error);
-      setLikes([]);
+      console.error("Error fetching user info:", error);
+      setUser(null);
     }
-  };
+  }, [userId, setUser]);
 
   useEffect(() => {
-    if (user && user.id) {
-      fetchLikes(user.id.toString());
-    }
-  }, [user]);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div>
-      <MyInfo user={user} setUser={setUser} />
-      <LikeList user={user} setUser={setUser} likes={likes} /> {/* LikeList 컴포넌트에 likes 전달 */}
+      {!isEditing ? (
+        <>
+          <MyInfo
+            user={user}
+            setUser={setUser}
+            setUserId={setUserId}
+            setIsEditing={setIsEditing}
+          />
+          <MyMenu user={user} userId={userId} />
+          <Outlet key={userId} />
+        </>
+      ) : (
+        <EditProfileForm
+          user={user}
+          setUser={setUser}
+          setIsEditing={setIsEditing}
+          refreshUserData={fetchData} // 수정 완료 후 데이터를 다시 가져오는 함수 전달
+        />
+      )}
     </div>
   );
 };

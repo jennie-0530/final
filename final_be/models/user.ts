@@ -1,7 +1,35 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../util/database';
 
-export const User = sequelize.define(
+// UserAttributes 정의: 모델에서 실제 사용하는 데이터 필드
+export interface UserAttributes {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+  about_me?: string;
+  profile_picture?: string;
+  follow?: string[];
+  created_at?: Date;
+  modified_at?: Date;
+}
+
+// UserCreationAttributes 정의: 유저 생성 시 필요한 필드
+type UserCreationAttributes = Optional<
+  UserAttributes,
+  | 'id'
+  | 'about_me'
+  | 'profile_picture'
+  | 'follow'
+  | 'created_at'
+  | 'modified_at'
+  | 'username'
+>;
+
+// User 모델 정의
+export const User = sequelize.define<
+  Model<UserAttributes, UserCreationAttributes>
+>(
   'User',
   {
     id: {

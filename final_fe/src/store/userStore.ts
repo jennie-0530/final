@@ -4,6 +4,7 @@ interface UserState {
   user: User | null;
   setUser: (user: User | null) => void;
 }
+
 // User 타입은 실제 유저 정보 타입으로 교체.
 export interface User {
   id: number;
@@ -16,10 +17,13 @@ export interface User {
   created_at: Date;
   modified_at: Date;
   influencer?: {
+    id: number;
     follower: string;
     banner_picture: string;
+    category: string;
   };
 }
+
 const createUserStore: StateCreator<UserState> = (set) => ({
   user: null,
   setUser: (user: User | null) => set({ user }),

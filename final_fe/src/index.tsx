@@ -10,6 +10,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import theme from './theme';
+import { OverlayProvider } from './hooks/useOverlay';
 
 // 글로벌 스타일을 적용할 래퍼 컴포넌트
 const AppWrapper = styled.div`
@@ -36,7 +37,9 @@ root.render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppWrapper>
-          <App />
+          <OverlayProvider>
+            <App />
+          </OverlayProvider>
         </AppWrapper>
       </ThemeProvider>
     </BrowserRouter>

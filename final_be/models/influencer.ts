@@ -1,8 +1,30 @@
-import { DataTypes } from 'sequelize';
+// influencer.ts
+
+import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../util/database';
 import { User } from './user'; // User 모델 가져오기
 
-export const Influencer = sequelize.define(
+// InfluencerAttributes 정의: 모델에서 실제 사용하는 데이터 필드
+export interface InfluencerAttributes {
+  id: number;
+  user_id: number;
+  follower: any[]; // JSON 형태로 저장되는 팔로워 정보
+  banner_picture?: string;
+  category?: string;
+  created_at?: Date;
+  modified_at?: Date;
+}
+
+// InfluencerCreationAttributes 정의: Influencer 모델 생성 시 필요한 필드
+type InfluencerCreationAttributes = Optional<
+  InfluencerAttributes,
+  'id' | 'created_at' | 'modified_at'
+>;
+
+// Influencer 모델 정의
+export const Influencer = sequelize.define<
+  Model<InfluencerAttributes, InfluencerCreationAttributes>
+>(
   'Influencer',
   {
     id: {
@@ -28,6 +50,10 @@ export const Influencer = sequelize.define(
       type: DataTypes.STRING(255), // VARCHAR(255)
       allowNull: true,
     },
+    category: {
+      type: DataTypes.STRING(255), // VARCHAR(255)
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE, // TIMESTAMP
       defaultValue: DataTypes.NOW, // CURRENT_TIMESTAMP
@@ -39,7 +65,9 @@ export const Influencer = sequelize.define(
     },    
   },
   {
-    timestamps: false, // createdAt과 updatedAt 자동 생성 비활성화
+    timestamps: true, // createdAt과 updatedAt 자동 생성 활성화
+    createdAt: 'created_at',
+    updatedAt: 'modified_at',
     tableName: 'Influencer', // 테이블 이름 명시
   }
 );
