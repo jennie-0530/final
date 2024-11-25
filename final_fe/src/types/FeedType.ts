@@ -11,4 +11,5 @@ export interface Feed {
   likes: string[];
   products: ProductsProps[]; // products의 타입은 실제 데이터에 맞게 정의
   visibility_level: number;
+  influencer: string;
 }

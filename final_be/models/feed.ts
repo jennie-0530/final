@@ -12,6 +12,7 @@ export interface FeedAttributes {
   likes?: string[]; // 좋아요 목록
   created_at?: Date;
   modified_at?: Date;
+  influencer?: { user: { username: string } };
 }
 
 // FeedCreationAttributes 정의: 피드를 생성할 때 필요한 필드

@@ -1,8 +1,10 @@
+import { User } from '../models/user';
+import { Influencer } from '../models/influencer';
 import { Feed } from '../models/feed'; // Feed 모델 임포트
 
 interface FeedData {
   influencer_id: number;
-  nickname: string;
+  // nickname: string;
   description: string;
   visibility_level: string;
   thumbnail: string[]; // 업로드된 썸네일 이미지 URL
@@ -17,6 +19,7 @@ export const saveFeedToDB = async (feedData: FeedData) => {
       influencer_id: feedData.influencer_id, // influencer_id 매핑
       content: feedData.description, // content 필드 매핑
       images: JSON.stringify(feedData.thumbnail), // JSON으로 변환
+      // username: feedData.nickname,
       // JSON.stringify를 사용해서 문자열로 변환
       products: feedData.product as {
         link: string;
@@ -37,7 +40,7 @@ export const saveFeedToDB = async (feedData: FeedData) => {
 export const getFeedById = async (id: number) => {
   try {
     const feed = await Feed.findOne({
-      where: { id }, // 조건: 피드 ID
+      where: { id },
       attributes: [
         'id',
         'influencer_id',
@@ -46,18 +49,35 @@ export const getFeedById = async (id: number) => {
         'products',
         'visibility_level',
         'likes',
-      ], // 필요한 필드만 선택
+      ],
+      include: [
+        {
+          model: Influencer,
+          as: 'influencer', // 관계 이름
+
+          include: [
+            {
+              model: User,
+              as: 'user', // 관계 이름
+              attributes: ['username'], // User 테이블에서 username만 가져오기
+            },
+          ],
+        },
+      ],
     });
 
     if (!feed) {
       throw new Error('Feed not found');
     }
 
-    // JSON.parse를 통해 문자열 필드를 다시 객체로 변환
-    const parsedFeed = {
-      ...feed.toJSON(),
+    // 모델 데이터를 일반 객체로 변환
+    const parsedFeed = feed.toJSON();
+    const result = {
+      ...parsedFeed,
+      influencer: parsedFeed?.influencer?.user?.username, // influencer에서 username만 추출
     };
-    return parsedFeed;
+
+    return result;
   } catch (error) {
     console.error('Error fetching feed by ID:', error);
     throw new Error('Error fetching feed by ID');

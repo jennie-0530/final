@@ -3,6 +3,7 @@ import multer from 'multer';
 import { getFeedById, saveFeedToDB } from '../services/feedService';
 import dotenv from 'dotenv';
 import uploadToS3 from '../util/uplode';
+import { User } from '../models/user';
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const upload = multer({ storage }).fields([
   { name: 'postImages', maxCount: 5 },
 ]);
 
-export const FeedGet: RequestHandler = async (req, res) => {
+export const FeedGetById: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -66,9 +67,15 @@ export const FeedWrite = async (req: Request, res: Response) => {
           ? productImgsTitle.split(',') // 문자열인 경우 쉼표로 구분하여 배열로 변환
           : productImgsTitle || [];
 
+      // User 데이터 가져오기
+      const user = await User.findOne({ where: { id: 5 } });
+
+      if (!user) {
+        return res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
+      }
+
       const feedData = {
         influencer_id: 5,
-        nickname: 'testUser',
         description,
         visibility_level: grade,
         thumbnail: thumbnailUrls,
